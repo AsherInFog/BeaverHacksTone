@@ -62,6 +62,16 @@ export default function App() {
     [inputText, targetLanguage, context, keepContext]
   );
 
+  const handleLanguageChange = (lang) => {
+    if (lang === targetLanguage) return;
+    setTargetLanguage(lang);
+    setInputText('');
+    setContext('');
+    setResults(null);
+    setError(null);
+    setHasTranslated(false);
+  };
+
   const handleRestoreHistory = (entry) => {
     setInputText(entry.inputText);
     setTargetLanguage(entry.language);
@@ -126,7 +136,7 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header targetLanguage={targetLanguage} setTargetLanguage={setTargetLanguage} />
+      <Header targetLanguage={targetLanguage} setTargetLanguage={handleLanguageChange} />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
         <Sidebar
