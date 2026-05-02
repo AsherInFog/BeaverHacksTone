@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Header from './components/Header.jsx';
 import InputPanel from './components/InputPanel.jsx';
 import ResultsGrid from './components/ResultsGrid.jsx';
@@ -17,7 +17,6 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasTranslated, setHasTranslated] = useState(false);
-  const isRestoringRef = useRef(false);
 
   const [history, setHistory] = useState(() => lsGet('tone_history', []));
   const [collections, setCollections] = useState(() => lsGet('tone_collections', []));
@@ -63,13 +62,7 @@ export default function App() {
     [inputText, targetLanguage, context, keepContext]
   );
 
-  useEffect(() => {
-    if (hasTranslated && !isRestoringRef.current) handleTranslate(targetLanguage);
-    isRestoringRef.current = false;
-  }, [targetLanguage]);
-
   const handleRestoreHistory = (entry) => {
-    isRestoringRef.current = true;
     setInputText(entry.inputText);
     setTargetLanguage(entry.language);
     setContext(entry.context || '');
