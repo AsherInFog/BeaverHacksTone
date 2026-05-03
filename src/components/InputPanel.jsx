@@ -54,7 +54,7 @@ export default function InputPanel({
         onKeyDown={(e) => {
           if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) onTranslate();
         }}
-        placeholder="Get started on translating here…"
+        placeholder={randomPlaceholder}
         rows={3}
         style={{
           width: '100%',
