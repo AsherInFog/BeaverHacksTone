@@ -9,8 +9,8 @@ import { translate } from './lib/api.js';
 import { lsGet, lsSet } from './lib/storage.js';
 
 export default function App() {
-  const [inputText, setInputText] = useState("I'm running late.");
-  const [targetLanguage, setTargetLanguage] = useState('ja');
+  const [inputText, setInputText] = useState("");
+  const [targetLanguage, setTargetLanguage] = useState('ja'); 
   const [context, setContext] = useState('');
   const [keepContext, setKeepContext] = useState(true);
   const [results, setResults] = useState(null);
