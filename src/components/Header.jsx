@@ -42,7 +42,7 @@ export default function Header({ targetLanguage, setTargetLanguage }) {
             letterSpacing: '0.01em',
           }}
         >
-          Translation Output Native Exchange
+          Translation, Output, Native, Exchange
         </p>
       </div>
       <LanguageToggle value={targetLanguage} onChange={setTargetLanguage} />

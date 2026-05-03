@@ -1,4 +1,21 @@
-const EXAMPLES = ["I'm running late.", 'Thanks for dinner.', 'I love you.'];
+import { useState } from 'react';
+
+const EXAMPLES = ["I'm gonna be a little late to work.", 'Thanks for the meal!.', 'I like your style.'];
+const placeholderOptions = [
+  "Get started on translating here...",
+  "Translate your deepest desires...",
+  "JUST TRANSLATE ALREADY!!!",
+  "Translate the world...",
+  "The world is yours to Translate...",
+  "Talking to the boss, best friends, or maybe even your crush? TONE can translate it all... ",
+  "Trying to make friends with the international students without sounding awkards, you can trust TONE for quality and native translation...",
+  "Want to sound like a native speaker? Yeah me too...",
+  "Japanese or Korean? Pick your poison...",
+  "Translate, translate, TRANSLATE!",
+  "What will it be today?",
+  "Oh, its you again...",
+  "Hurry up and translate!",
+];
 
 export default function InputPanel({
   inputText,
@@ -10,6 +27,12 @@ export default function InputPanel({
   onTranslate,
   isLoading,
 }) {
+
+  const [randomPlaceholder] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * placeholderOptions.length);
+    return placeholderOptions[randomIndex];
+  });
+  
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <label
@@ -31,7 +54,7 @@ export default function InputPanel({
         onKeyDown={(e) => {
           if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) onTranslate();
         }}
-        placeholder="Type something in English…"
+        placeholder="Get started on translating here…"
         rows={3}
         style={{
           width: '100%',
@@ -215,7 +238,6 @@ export default function InputPanel({
       </div>
 
       <p style={{ fontFamily: 'var(--sans)', fontSize: '11px', color: 'var(--ink-light)', opacity: 0.6 }}>
-        ⌘↵ to translate
       </p>
     </div>
   );
