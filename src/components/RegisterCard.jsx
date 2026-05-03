@@ -147,7 +147,9 @@ export default function RegisterCard({
             </p>
             {canSpeak && (
               <button
-                onClick={() => speak(data.translation, language)}
+                onClick={() =>
+                  speak(language === 'ja' && data.kana ? data.kana : data.translation, language)
+                }
                 title="Speak"
                 style={{
                   background: 'transparent',

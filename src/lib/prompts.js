@@ -1,11 +1,18 @@
-const SHARED_INSTRUCTIONS = `Return ONLY a JSON object with this exact shape:
+const JA_SHAPE = `Return ONLY a JSON object with this exact shape (no code fences, no commentary):
+{
+  "casual":   { "translation": "...", "kana": "...", "romanization": "...", "note": "..." },
+  "polite":   { "translation": "...", "kana": "...", "romanization": "...", "note": "..." },
+  "formal":   { "translation": "...", "kana": "...", "romanization": "...", "note": "..." },
+  "intimate": { "translation": "...", "kana": "...", "romanization": "...", "note": "..." }
+}`;
+
+const KO_SHAPE = `Return ONLY a JSON object with this exact shape (no code fences, no commentary):
 {
   "casual":   { "translation": "...", "romanization": "...", "note": "..." },
   "polite":   { "translation": "...", "romanization": "...", "note": "..." },
   "formal":   { "translation": "...", "romanization": "...", "note": "..." },
   "intimate": { "translation": "...", "romanization": "...", "note": "..." }
-}
-Do not wrap in code fences. Do not add commentary. Each "note" is a one-sentence English description of when to use that register.`;
+}`;
 
 const JA_PROMPT = ({ text, context }) => `You are a Japanese translator producing four register-aware translations.
 
@@ -16,32 +23,33 @@ Registers:
 - intimate: partners, very close family. Soft, warm phrasing.
 
 English input: """${text}"""
-${context ? `Situation: ${context}` : ''}
+${context ? `Situation: ${context}\n\nIMPORTANT: Use the situation to refine word choice, tone, and phrasing WITHIN each register. The grammatical formality level of each register stays fixed, but vocabulary, particles, and softeners should reflect the situation.` : ''}
 
-For each register provide:
-- translation: Japanese (kanji + kana as natural)
+For each register, provide:
+- translation: Japanese using natural kanji + kana
+- kana: the SAME translation rewritten using ONLY hiragana (and katakana for foreign words). No kanji at all. This is used for text-to-speech and must be the exact phonetic reading of the translation field.
 - romanization: Hepburn romaji
-- note: one sentence in English on when to use this
+- note: one sentence in English on when to use this register
 
-${SHARED_INSTRUCTIONS}`;
+${JA_SHAPE}`;
 
 const KO_PROMPT = ({ text, context }) => `You are a Korean translator producing four register-aware translations.
 
 Registers:
 - casual (반말): close friends, younger people you're close with.
 - polite (해요체): default polite, most everyday situations.
-- formal (합쇼체): business, formal settings, announcements.
+- formal (격식): business, formal settings, announcements.
 - intimate: partners, close family. Softer than 반말, warmer tone.
 
 English input: """${text}"""
-${context ? `Situation: ${context}` : ''}
+${context ? `Situation: ${context}\n\nIMPORTANT: Use the situation to refine word choice, tone, and phrasing WITHIN each register. The grammatical formality level of each register stays fixed, but vocabulary and softeners should reflect the situation.` : ''}
 
-For each register provide:
+For each register, provide:
 - translation: Hangul
 - romanization: Revised Romanization
-- note: one sentence in English on when to use this
+- note: one sentence in English on when to use this register
 
-${SHARED_INSTRUCTIONS}`;
+${KO_SHAPE}`;
 
 export function buildPrompt({ text, language, context }) {
   if (language === 'ja') return JA_PROMPT({ text, context });
