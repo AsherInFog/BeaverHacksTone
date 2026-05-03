@@ -1,12 +1,25 @@
+import { useState } from 'react';
+
 export default function Sidebar({
   history,
   collections,
   onRestoreHistory,
   onDeleteHistory,
   onOpenCollection,
+  onCreateCollection,
   activeSection,
   setActiveSection,
 }) {
+  const [showNewFolder, setShowNewFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+
+  const submitNewFolder = () => {
+    if (!newFolderName.trim()) return;
+    onCreateCollection(newFolderName);
+    setNewFolderName('');
+    setShowNewFolder(false);
+  };
+
   return (
     <aside
       className="tone-sidebar"
@@ -152,6 +165,79 @@ export default function Sidebar({
 
       {activeSection === 'Saved' && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+          <div style={{ padding: '8px 14px 10px', borderBottom: '1px solid var(--parchment-mid)' }}>
+            {showNewFolder ? (
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <input
+                  autoFocus
+                  value={newFolderName}
+                  onChange={(e) => setNewFolderName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') submitNewFolder();
+                    if (e.key === 'Escape') {
+                      setShowNewFolder(false);
+                      setNewFolderName('');
+                    }
+                  }}
+                  placeholder="Folder name…"
+                  style={{
+                    flex: 1,
+                    padding: '6px 10px',
+                    fontSize: '12px',
+                    fontFamily: 'var(--sans)',
+                    border: '1px solid var(--parchment-deep)',
+                    borderRadius: 'var(--radius)',
+                    outline: 'none',
+                    color: 'var(--ink)',
+                    background: 'white',
+                  }}
+                />
+                <button
+                  onClick={submitNewFolder}
+                  style={{
+                    padding: '6px 10px',
+                    background: 'var(--vermillion)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 'var(--radius)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    fontFamily: 'var(--sans)',
+                  }}
+                >
+                  Add
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowNewFolder(true)}
+                style={{
+                  width: '100%',
+                  padding: '6px 10px',
+                  background: 'transparent',
+                  color: 'var(--ink-light)',
+                  border: '1px dashed var(--parchment-deep)',
+                  borderRadius: 'var(--radius)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  fontFamily: 'var(--sans)',
+                  transition: 'all 0.15s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--vermillion-soft)';
+                  e.currentTarget.style.color = 'var(--vermillion)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--parchment-deep)';
+                  e.currentTarget.style.color = 'var(--ink-light)';
+                }}
+              >
+                + New folder
+              </button>
+            )}
+          </div>
           {collections.length === 0 ? (
             <p
               style={{

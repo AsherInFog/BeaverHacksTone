@@ -48,3 +48,31 @@ export function buildPrompt({ text, language, context }) {
   if (language === 'ko') return KO_PROMPT({ text, context });
   throw new Error(`Unsupported language: ${language}`);
 }
+
+const REGISTER_LABELS = {
+  ja: {
+    casual: 'casual (タメ口)',
+    polite: 'polite (です・ます)',
+    formal: 'formal (敬語)',
+    intimate: 'intimate',
+  },
+  ko: {
+    casual: 'casual (반말)',
+    polite: 'polite (해요체)',
+    formal: 'formal (격식)',
+    intimate: 'intimate',
+  },
+};
+
+export function buildExplainPrompt({ text, language, context, register, translation }) {
+  const langName = language === 'ja' ? 'Japanese' : 'Korean';
+  const regLabel = REGISTER_LABELS[language]?.[register] || register;
+  return `You are a ${langName} language tutor explaining a translation choice to a learner.
+
+English source: """${text}"""
+${context ? `Situation: ${context}` : ''}
+Register: ${regLabel}
+${langName} translation: ${translation}
+
+In 2–3 sentences of plain English prose, explain why this specific phrasing fits the register and situation. Reference concrete grammar, vocabulary, or honorific choices (specific verb endings, particles, word selections) that signal the register. Do not return JSON. Do not greet the user. Just the explanation.`;
+}

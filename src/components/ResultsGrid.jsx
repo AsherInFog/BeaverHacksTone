@@ -16,6 +16,7 @@ function useClipboard() {
 
 export default function ResultsGrid({
   results,
+  resultsMeta,
   language,
   isLoading,
   collections,
@@ -43,6 +44,9 @@ export default function ResultsGrid({
           key={reg.key}
           register={reg}
           data={results[reg.key]}
+          language={language}
+          sourceText={resultsMeta?.sourceText || ''}
+          context={resultsMeta?.context || ''}
           copied={copied}
           onCopy={copy}
           collections={collections}

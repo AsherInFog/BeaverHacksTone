@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
-const EXAMPLES = ["I'm gonna be a little late to work.", 'Thanks for the meal!.', 'I like your style.'];
+const EXAMPLES = ["I'm gonna be a little late to work.", 'Thanks for the meal!', 'Want to go grab some food together?'];
 const placeholderOptions = [
   "Get started on translating here...",
-  "Translate your deepest desires...",
+  "Translate your deepest desires now...",
   "JUST TRANSLATE ALREADY!!!",
   "Translate the world...",
-  "The world is yours to Translate...",
+  "The world is yours to translate...",
   "Talking to the boss, best friends, or maybe even your crush? TONE can translate it all... ",
-  "Trying to make friends with the international students without sounding awkards, you can trust TONE for quality and native translation...",
+  "Trying to make friends with the international students without sounding awkard? You can trust TONE for quality and native translation...",
   "Want to sound like a native speaker? Yeah me too...",
   "Japanese or Korean? Pick your poison...",
   "Translate, translate, TRANSLATE!",
@@ -32,7 +32,7 @@ export default function InputPanel({
     const randomIndex = Math.floor(Math.random() * placeholderOptions.length);
     return placeholderOptions[randomIndex];
   });
-  
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <label

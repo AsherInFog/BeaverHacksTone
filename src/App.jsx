@@ -14,6 +14,7 @@ export default function App() {
   const [context, setContext] = useState('');
   const [keepContext, setKeepContext] = useState(true);
   const [results, setResults] = useState(null);
+  const [resultsMeta, setResultsMeta] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasTranslated, setHasTranslated] = useState(false);
@@ -43,6 +44,7 @@ export default function App() {
       try {
         const data = await translate({ text: inputText, language: lang, context });
         setResults(data);
+        setResultsMeta({ sourceText: inputText, language: lang, context });
         const entry = {
           id: Date.now() + Math.random(),
           inputText,
@@ -68,6 +70,7 @@ export default function App() {
     setInputText('');
     setContext('');
     setResults(null);
+    setResultsMeta(null);
     setError(null);
     setHasTranslated(false);
   };
@@ -77,7 +80,19 @@ export default function App() {
     setTargetLanguage(entry.language);
     setContext(entry.context || '');
     setResults(entry.results);
+    setResultsMeta({
+      sourceText: entry.inputText,
+      language: entry.language,
+      context: entry.context || '',
+    });
     setHasTranslated(true);
+  };
+
+  const handleCreateCollection = (name) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    setCollections((prev) => [{ id: Date.now(), name: trimmed, items: [] }, ...prev]);
+    showToast(`Created folder "${trimmed}"`);
   };
 
   const handleDeleteHistory = (id) => {
@@ -145,6 +160,7 @@ export default function App() {
           onRestoreHistory={handleRestoreHistory}
           onDeleteHistory={handleDeleteHistory}
           onOpenCollection={handleOpenCollection}
+          onCreateCollection={handleCreateCollection}
           activeSection={sidebarSection}
           setActiveSection={setSidebarSection}
         />
@@ -212,6 +228,7 @@ export default function App() {
               </div>
               <ResultsGrid
                 results={results}
+                resultsMeta={resultsMeta}
                 language={targetLanguage}
                 isLoading={isLoading}
                 collections={collections}
